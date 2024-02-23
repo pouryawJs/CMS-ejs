@@ -2,32 +2,28 @@ const mongoose = require("mongoose");
 
 const adminsSchema = mongoose.Schema(
     {
-        firstName: {
+        firstname: {
             type: String,
             required: true,
             minLength: 3,
-            trim: true,
         },
 
-        lastName: {
+        lastname: {
             type: String,
             required: true,
             minLength: 3,
-            trim: true,
         },
 
-        userName: {
+        username: {
             type: String,
             required: true,
             minLength: 3,
-            trim: true,
         },
 
         password: {
             type: String,
             required: true,
             minLength: 8,
-            trim: true,
         },
 
         email: {
