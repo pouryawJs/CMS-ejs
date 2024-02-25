@@ -73,7 +73,7 @@ exports.create = async (req, res) => {
 };
 exports.loginPage = (req, res) => {
     const msgs = req.flash("msgs");
-    res.render("register", {
+    res.render("login", {
         msgs,
     });
 };
@@ -91,17 +91,22 @@ exports.login = async (req, res) => {
         const user = await AdminModel.findOne({ username });
 
         if (!user) {
-            req.flash("msgs", "invalid Data");
+            req.flash("msgs", { path: "username", msg: "invalid username" });
             return res.redirect("login");
         }
 
         // check password
-        if (bcrypt.compareSync(password, user.password)) {
-            console.log("passed");
-            // req.flash("msgs", "invalid Data");
-            // return res.redirect("login");
+        if (!bcrypt.compareSync(password, user.password)) {
+            req.flash("msgs", { path: "password", msg: "invalid password" });
+            return res.redirect("login");
         }
 
-        res.redirect("/login");
-    } catch (error) {}
+        return res.redirect("info");
+    } catch (error) {
+        req.flash("msg", "Something went wrong");
+        return res.render("login");
+    }
+};
+exports.infoPanel = async (req, res) => {
+    return res.render("panel-change-info");
 };

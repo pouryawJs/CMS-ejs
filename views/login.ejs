@@ -14,13 +14,13 @@
             <h1 class="wrap-title">login your user panel</h1>
 
             <!-- ! -------------------------------- form --------------------------------- ! -->
-            <form action="" method="" class="form-login">
+            <form action="/users/login" method="POST" class="form-login">
                 <!-- ! --------------------------- username input ---------------------------- ! -->
                 <div class="input-group username-group">
                     <input
                         type="text"
                         class="form-input"
-                        name="username-input"
+                        name="username"
                         id="username-input"
                         placeholder="nothing"
                         spellcheck="false"
@@ -71,8 +71,11 @@
                         </svg>
                     </span>
                 </div>
-                <h3 class="message valid-message">
+                <h3 class="message invalid-message">
                     <!-- error message or success message -->
+                    <% if (typeof msgs != "undefined" && msgs){%> <%
+                    msgs.forEach(message => {%> <% if(message.path ==
+                    "username"){%> <%= message.msg %> <%}%> <%})%> <% }%>
                 </h3>
 
                 <!-- ! --------------------------- password input ---------------------------- ! -->
@@ -120,7 +123,7 @@
                     <input
                         type="password"
                         class="form-input"
-                        name="password-input"
+                        name="password"
                         id="password-input"
                         placeholder="nothing"
                         spellcheck="false"
@@ -182,6 +185,9 @@
                 </div>
                 <h3 class="message invalid-message">
                     <!-- error message or success message -->
+                    <% if (typeof msgs != "undefined" && msgs){%> <%
+                    msgs.forEach(message => {%> <% if(message.path ==
+                    "password"){%> <%= message.msg %> <%}%> <%})%> <% }%>
                 </h3>
 
                 <input

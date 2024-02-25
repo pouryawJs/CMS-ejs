@@ -13,5 +13,6 @@ router
     .route("/login")
     .get(userController.loginPage)
     .post(loginValidator(), validationErrors, userController.login);
+router.route("/info").get(userController.infoPanel);
 
 module.exports = router;
