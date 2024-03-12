@@ -17,7 +17,7 @@
                 <!-- ! ------------------------------- profile ------------------------------- ! -->
                 <div class="profile-container">
                     <div class="admin-profile">
-                        <img src="content/img/profile/banana.png" alt="" />
+                        <img src="/img/profile/banana.png" alt="" />
                         <!-- admin profile -->
                     </div>
                     <div class="admin-detail">
@@ -260,10 +260,7 @@
                     <div class="admin-card-profile-container">
                         <!-- admin banner -->
                         <div class="admin-profile-card">
-                            <img
-                                src="content/img/profile/banana.png"
-                                alt="profile"
-                            />
+                            <img src="/img/profile/banana.png" alt="profile" />
                             <!-- admin profile -->
                         </div>
                     </div>
@@ -333,10 +330,9 @@
                                     </svg>
                                     First name
                                 </span>
-                                <span
-                                    id="admin-first-name"
-                                    class="dark-blue"
-                                ></span>
+                                <span id="admin-first-name" class="dark-blue">
+                                    <%= user.firstname %>
+                                </span>
                                 <!-- first name of admin -->
                             </div>
                             <div class="admin-info-box">
@@ -431,10 +427,9 @@
                                     </svg>
                                     Last name
                                 </span>
-                                <span
-                                    id="admin-last-name"
-                                    class="orange"
-                                ></span>
+                                <span id="admin-last-name" class="orange">
+                                    <%= user.lastname %>
+                                </span>
                                 <!-- last name of admin -->
                             </div>
                             <div class="admin-info-box">
@@ -530,72 +525,12 @@
                                     </svg>
                                     Courses
                                 </span>
-                                <span
-                                    id="admin-courses"
-                                    class="dark-blue"
-                                ></span>
+                                <span id="admin-courses" class="dark-blue">
+                                    <%= courses %>
+                                </span>
                                 <!-- all courses -->
                             </div>
                         </div>
-                    </div>
-
-                    <div class="change-info-btn-box">
-                        <a
-                            class="change-info-btn"
-                            href="panel-change-info.html"
-                        >
-                            <svg
-                                id="vuesax_linear_edit"
-                                data-name="vuesax/linear/edit"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="22.183"
-                                height="22.183"
-                                viewBox="0 0 22.183 22.183"
-                            >
-                                <g id="edit">
-                                    <path
-                                        id="Vector"
-                                        d="M8.319,0H6.47C1.849,0,0,1.849,0,6.47v5.546c0,4.622,1.849,6.47,6.47,6.47h5.546c4.622,0,6.47-1.849,6.47-6.47V10.167"
-                                        transform="translate(1.849 1.849)"
-                                        fill="none"
-                                        stroke="var(--white)"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="1.5"
-                                    />
-                                    <path
-                                        id="Vector-2"
-                                        data-name="Vector"
-                                        d="M8.31,1.175,1.027,8.459a2.507,2.507,0,0,0-.61,1.22l-.4,2.782a1.317,1.317,0,0,0,1.571,1.571l2.782-.4a2.589,2.589,0,0,0,1.22-.61l7.284-7.284c1.257-1.257,1.849-2.717,0-4.566S9.568-.082,8.31,1.175Z"
-                                        transform="translate(6.515 1.616)"
-                                        fill="none"
-                                        stroke="var(--white)"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="1.5"
-                                    />
-                                    <path
-                                        id="Vector-3"
-                                        data-name="Vector"
-                                        d="M0,0A6.6,6.6,0,0,0,4.566,4.566"
-                                        transform="translate(13.781 3.836)"
-                                        fill="none"
-                                        stroke="var(--white)"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="1.5"
-                                    />
-                                    <path
-                                        id="Vector-4"
-                                        data-name="Vector"
-                                        d="M0,0H22.183V22.183H0Z"
-                                        fill="none"
-                                        opacity="0"
-                                    />
-                                </g>
-                            </svg>
-                            Change information
-                        </a>
                     </div>
                 </section>
 
@@ -886,7 +821,11 @@
                     <!-- ! ------------------------- change info section ------------------------- ! -->
                     <div class="change-info-section">
                         <!-- ! -------------------------- change info form --------------------------- ! -->
-                        <form action="" method="" id="change-info-form">
+                        <form
+                            action="/admin/change-info"
+                            method="post"
+                            id="change-info-form"
+                        >
                             <!-- ! ----------------------------- form border ----------------------------- ! -->
                             <div class="form-border">
                                 <span class="form-border-text"
@@ -900,14 +839,10 @@
                                     <!-- ! ----------------------------- first name ------------------------------ ! -->
                                     <div class="input-group first-name-group">
                                         <!-- add valid class or invalid class to change color of input -->
-                                        <input
-                                            type="text"
-                                            class="form-input"
-                                            name="first-name-input"
-                                            id="first-name-input"
-                                            placeholder="nothing"
-                                            spellcheck="false"
-                                        />
+                                        <input type="text" class="form-input"
+                                        name="firstname id="first-name-input"
+                                        placeholder="nothing" spellcheck="false"
+                                        value="<%= user.firstname %>" />
                                         <label
                                             for="first-name-input"
                                             class="input-label"
@@ -971,6 +906,13 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <h3 class="message invalid-message">
+                                        <!-- error message or success message -->
+                                        <% if (typeof msgs != "undefined" &&
+                                        msgs){%> <% msgs.forEach(message => {%>
+                                        <% if(message.path == "firstname"){%>
+                                        <%= message.msg %> <%}%> <%})%> <% }%>
+                                    </h3>
                                 </div>
 
                                 <div class="last-name-box">
@@ -980,10 +922,11 @@
                                         <input
                                             type="text"
                                             class="form-input"
-                                            name="last-name-input"
+                                            name="lastname"
                                             id="last-name-input"
                                             placeholder="nothing"
                                             spellcheck="false"
+                                            value="<%= user.lastname %>"
                                         />
                                         <label
                                             for="last-name-input"
@@ -1081,6 +1024,13 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <h3 class="message invalid-message">
+                                        <!-- error message or success message -->
+                                        <% if (typeof msgs != "undefined" &&
+                                        msgs){%> <% msgs.forEach(message => {%>
+                                        <% if(message.path == "lastname"){%> <%=
+                                        message.msg %> <%}%> <%})%> <% }%>
+                                    </h3>
                                 </div>
                             </div>
 
@@ -1147,10 +1097,11 @@
                                         <input
                                             type="text"
                                             class="form-input"
-                                            name="current-password-input"
+                                            name="username"
                                             id="username-input"
                                             placeholder="nothing"
                                             spellcheck="false"
+                                            value="<%= user.username %>"
                                         />
                                         <label
                                             for="current-password-input"
@@ -1212,6 +1163,13 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <h3 class="message invalid-message">
+                                        <!-- error message or success message -->
+                                        <% if (typeof msgs != "undefined" &&
+                                        msgs){%> <% msgs.forEach(message => {%>
+                                        <% if(message.path == "username"){%> <%=
+                                        message.msg %> <%}%> <%})%> <% }%>
+                                    </h3>
                                 </div>
 
                                 <div class="confirm-password-box">
@@ -1268,7 +1226,7 @@
                                         <input
                                             type="password"
                                             class="form-input"
-                                            name="new-password-input"
+                                            name="password"
                                             id="new-password-input"
                                             placeholder="nothing"
                                             spellcheck="false"
@@ -1333,6 +1291,13 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <h3 class="message invalid-message">
+                                        <!-- error message or success message -->
+                                        <% if (typeof msgs != "undefined" &&
+                                        msgs){%> <% msgs.forEach(message => {%>
+                                        <% if(message.path == "password"){%> <%=
+                                        message.msg %> <%}%> <%})%> <% }%>
+                                    </h3>
                                 </div>
 
                                 <div class="new-password-box">
@@ -1471,10 +1436,11 @@
                                         <input
                                             type="text"
                                             class="form-input"
-                                            name="email-input"
+                                            name="email"
                                             id="email-input"
                                             placeholder="nothing"
                                             spellcheck="false"
+                                            value="<%= user.email %>"
                                         />
                                         <label
                                             for="email-input"
@@ -1561,6 +1527,13 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <h3 class="message invalid-message">
+                                        <!-- error message or success message -->
+                                        <% if (typeof msgs != "undefined" &&
+                                        msgs){%> <% msgs.forEach(message => {%>
+                                        <% if(message.path == "email"){%> <%=
+                                        message.msg %> <%}%> <%})%> <% }%>
+                                    </h3>
                                 </div>
                             </div>
 
@@ -1576,7 +1549,7 @@
                                 <!-- ! ------------------------- change profile box -------------------------- ! -->
                                 <div class="change-profile-input-box">
                                     <img
-                                        src="content/img/profile/banana.png"
+                                        src="/img/profile/banana.png"
                                         class="change-profile-pic"
                                         alt=""
                                     />
@@ -1595,7 +1568,7 @@
                                 <!-- ! -------------------------- change banner box -------------------------- ! -->
                                 <div class="change-banner-input-box">
                                     <img
-                                        src="content/img/banner/banner.png"
+                                        src="/img/banner/banner.png"
                                         class="change-banner-pic"
                                         alt=""
                                     />

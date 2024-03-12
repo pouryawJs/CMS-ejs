@@ -1,5 +1,6 @@
 const UserModel = require("./user.model");
 const AdminModel = require("./../Admins/admin.model");
+const CoursesModel = require("./../Courses/course.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -46,6 +47,11 @@ exports.create = async (req, res) => {
                 ...newUser,
                 email: "test-admins-email@gmail.com",
             });
+            // jwt token
+            const token = jwt.sign({ username }, process.env.SECRET_KEY, {
+                expiresIn: "30 day",
+            });
+            res.cookie("token", token);
             return res.redirect("panel-change-info");
         }
         //
@@ -56,15 +62,6 @@ exports.create = async (req, res) => {
             return res.redirect("register");
         }
 
-        // jwt token
-        const token = jwt.sign(
-            { username, firstname },
-            process.env.SECRET_KEY,
-            {
-                expiresIn: "30 day",
-            }
-        );
-
         return res.redirect("register");
     } catch (error) {
         req.flash("msg", "Something went wrong");
@@ -72,10 +69,17 @@ exports.create = async (req, res) => {
     }
 };
 exports.loginPage = (req, res) => {
-    const msgs = req.flash("msgs");
-    res.render("login", {
-        msgs,
-    });
+    try {
+        const { token } = req.cookies;
+        // token validation
+        jwt.verify(token, process.env.SECRET_KEY);
+        return res.redirect("info");
+    } catch (error) {
+        const msgs = req.flash("msgs");
+        return res.render("login", {
+            msgs,
+        });
+    }
 };
 exports.login = async (req, res) => {
     try {
@@ -100,7 +104,14 @@ exports.login = async (req, res) => {
             req.flash("msgs", { path: "password", msg: "invalid password" });
             return res.redirect("login");
         }
+        // jwt token
+        const token = jwt.sign({ username }, process.env.SECRET_KEY, {
+            expiresIn: "30 day",
+        });
 
+        res.cookie("token", token, {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+        });
         return res.redirect("info");
     } catch (error) {
         req.flash("msg", "Something went wrong");
@@ -108,5 +119,24 @@ exports.login = async (req, res) => {
     }
 };
 exports.infoPanel = async (req, res) => {
-    return res.render("panel-change-info");
+    try {
+        const { token } = req.cookies;
+        // token validation
+        const payloadData = jwt.verify(token, process.env.SECRET_KEY);
+        // find user data
+        let admin = await AdminModel.findOne({
+            username: payloadData.username,
+        }).select("-password");
+        // courses count (for information table)
+        const courses = await CoursesModel.find({ creator: admin._id }).count();
+        // flash msgs that comes from /admins/change-info api
+        const msgs = req.flash("msgs");
+        return res.render("panel-change-info", {
+            user: admin,
+            courses,
+            msgs,
+        });
+    } catch (error) {
+        return res.redirect("login");
+    }
 };
