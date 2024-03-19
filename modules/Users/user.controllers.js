@@ -41,8 +41,9 @@ exports.create = async (req, res) => {
 
         // create Admin if there is no user
         const usersCount = await UserModel.find({}).count();
+        const adminsCount = await AdminModel.find({}).count();
 
-        if (usersCount === 0) {
+        if (usersCount === 0 && adminsCount === 0) {
             await AdminModel.create({
                 ...newUser,
                 email: "test-admins-email@gmail.com",
@@ -120,13 +121,7 @@ exports.login = async (req, res) => {
 };
 exports.infoPanel = async (req, res) => {
     try {
-        const { token } = req.cookies;
-        // token validation
-        const payloadData = jwt.verify(token, process.env.SECRET_KEY);
-        // find user data
-        let admin = await AdminModel.findOne({
-            username: payloadData.username,
-        }).select("-password");
+        const admin = req.admin;
         // courses count (for information table)
         const courses = await CoursesModel.find({ creator: admin._id }).count();
         // flash msgs that comes from /admins/change-info api
@@ -139,4 +134,20 @@ exports.infoPanel = async (req, res) => {
     } catch (error) {
         return res.redirect("login");
     }
+};
+exports.usersPanel = async (req, res) => {
+    try {
+        const admin = req.admin;
+        // get all users
+        const users = await UserModel.find({}).lean();
+        // courses count (for information table)
+        const courses = await CoursesModel.find({ creator: admin._id }).count();
+        //
+        console.log(users);
+        return res.render("panel-users", {
+            user: admin,
+            users,
+            courses,
+        });
+    } catch (error) {}
 };

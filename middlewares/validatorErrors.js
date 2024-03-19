@@ -13,7 +13,6 @@ const validationErrors = (req, res, next) => {
     if (errors.length !== 0) {
         req.err = errors;
     }
-
     next();
 };
 
