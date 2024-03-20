@@ -143,7 +143,6 @@ exports.usersPanel = async (req, res) => {
         // courses count (for information table)
         const courses = await CoursesModel.find({ creator: admin._id }).count();
         //
-        console.log(users);
         return res.render("panel-users", {
             user: admin,
             users,
