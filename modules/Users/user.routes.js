@@ -15,7 +15,7 @@ router
     .get(userController.loginPage)
     .post(loginValidator(), validationErrors, userController.login);
 router.route("/all-users").get(isAdmin, userController.usersPanel);
-
 router.route("/info").get(isAdmin, userController.infoPanel);
+router.route("/remove/:id").delete(isAdmin, userController.delete);
 
 module.exports = router;

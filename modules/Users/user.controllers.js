@@ -3,6 +3,7 @@ const AdminModel = require("./../Admins/admin.model");
 const CoursesModel = require("./../Courses/course.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { isValidObjectId } = require("mongoose");
 
 exports.registerPage = (req, res) => {
     const msgs = req.flash("msgs");
@@ -149,4 +150,27 @@ exports.usersPanel = async (req, res) => {
             courses,
         });
     } catch (error) {}
+};
+exports.delete = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!isValidObjectId(id)) {
+            console.log("helo");
+            res.flash("msg", "invalid id");
+            return res.status(401).redirect("/all-users");
+        }
+
+        // remove user
+        const deletedUser = await UserModel.findOneAndDelete({ _id: id });
+
+        if (!deletedUser) {
+            req.flash("msg", "user not found");
+            return res.status(404).redirect("/all-users");
+        }
+
+        return res.redirect("/all-users");
+    } catch (error) {
+        req.flash("msg", "server error");
+        return res.status(500).redirect("/all-users");
+    }
 };
