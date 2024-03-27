@@ -155,7 +155,6 @@ exports.delete = async (req, res) => {
     try {
         const { id } = req.params;
         if (!isValidObjectId(id)) {
-            console.log("helo");
             res.flash("msg", "invalid id");
             return res.status(401).redirect("/all-users");
         }
