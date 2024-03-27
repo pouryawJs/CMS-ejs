@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 // routers
 const userRouter = require("./modules/Users/user.routes");
 const adminRouter = require("./modules/Admins/admin.routes");
+const courseRouter = require("./modules/Courses/course.routes");
 //
 const app = express();
 
@@ -35,5 +36,6 @@ app.use(flash());
 
 app.use("/users", userRouter);
 app.use("/admin", adminRouter);
+app.use("/courses", courseRouter);
 
 module.exports = app;
