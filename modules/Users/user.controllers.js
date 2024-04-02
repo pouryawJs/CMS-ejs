@@ -124,12 +124,14 @@ exports.infoPanel = async (req, res) => {
     try {
         const admin = req.admin;
         // courses count (for information table)
-        const courses = await CoursesModel.find({ creator: admin._id }).count();
+        const adminCoursesCount = await CoursesModel.find({
+            creator: admin._id,
+        }).count();
         // flash msgs that comes from /admins/change-info api
         const msgs = req.flash("msgs");
         return res.render("panel-change-info", {
             user: admin,
-            courses,
+            adminCoursesCount,
             msgs,
         });
     } catch (error) {
@@ -142,12 +144,14 @@ exports.usersPanel = async (req, res) => {
         // get all users
         const users = await UserModel.find({}).lean();
         // courses count (for information table)
-        const courses = await CoursesModel.find({ creator: admin._id }).count();
+        const adminCoursesCount = await CoursesModel.find({
+            creator: admin._id,
+        }).count();
         //
         return res.render("panel-users", {
             user: admin,
             users,
-            courses,
+            adminCoursesCount,
         });
     } catch (error) {}
 };

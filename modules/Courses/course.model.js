@@ -12,7 +12,6 @@ const courseSchema = mongoose.Schema(
         body: {
             type: String,
             required: true,
-            minLength: 10,
             trim: true,
         },
 
